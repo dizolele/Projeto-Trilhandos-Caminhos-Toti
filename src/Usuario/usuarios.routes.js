@@ -11,8 +11,9 @@ const Trilha = require("./../Trilha/trilhas.models");
 const trilhasControllers = require("./../Trilha/trilhas.controller");
 const trilhasMiddelwares = require("./../Trilha/trilhas.middelwares");
 
-const Usuario = require("./usuarios.models")
-const usuarioControllers = require("./usuario.controllers")
+const Usuario = require("./usuarios.models");
+const usuarioControllers = require("./usuario.controllers");
+const usuarioMiddelwares = require("./usuarios.middelwares");
 
 const authMiddelwares = require("../auth/auth.middelwares");
 
@@ -23,7 +24,7 @@ routers.get("/", (req, res) => {
 // Rotas referentes a Trilhas
 routers.get("/trilhas", authMiddelwares.verifyToken, trilhasControllers.showAll);
 
-routers.get("/trilha/:id", authMiddelwares.verifyToken, trilhasMiddelwares.checkId, trilhasControllers.showById);
+routers.get("/trilha/:id", authMiddelwares.verifyToken, trilhasMiddelwares.checkCharecter, trilhasMiddelwares.checkId, trilhasControllers.showById);
 
 routers.post("/trilhas", authMiddelwares.verifyToken, trilhasControllers.post_Put("post"));
 
@@ -36,6 +37,8 @@ routers.delete("trilhas/:id", authMiddelwares.verifyToken, trilhasControllers.de
 routers.post("/login", authMiddelwares.auth);
 
 routers.get("/allUsuarios", authMiddelwares.verifyToken, usuarioControllers.showAll);
+
+routers.get("/usuario/:id", authMiddelwares.verifyToken, usuarioMiddelwares.checkIdCharecter, usuarioMiddelwares.checkId, usuarioControllers.showById);
 
 routers.post("/usuarios", authMiddelwares.verifyToken, usuarioControllers.post_Put("post"));
 
