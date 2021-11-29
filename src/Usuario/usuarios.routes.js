@@ -14,29 +14,33 @@ const trilhasMiddelwares = require("./../Trilha/trilhas.middelwares");
 const Usuario = require("./usuarios.models")
 const usuarioControllers = require("./usuario.controllers")
 
+const authMiddelwares = require("../auth/auth.middelwares");
+
 routers.get("/", (req, res) => {
     res.status(200).send("Ola, Mbora escrever o projeto Trilhando Caminhos, Foco sempre")
 })
 
 // Rotas referentes a Trilhas
-routers.get("/trilhas", trilhasControllers.showAll);
+routers.get("/trilhas", authMiddelwares.verifyToken, trilhasControllers.showAll);
 
-routers.get("/trilha/:id", trilhasMiddelwares.checkId, trilhasControllers.showById);
+routers.get("/trilha/:id", authMiddelwares.verifyToken, trilhasMiddelwares.checkId, trilhasControllers.showById);
 
-routers.post("/trilhas", trilhasControllers.post_Put("post"));
+routers.post("/trilhas", authMiddelwares.verifyToken, trilhasControllers.post_Put("post"));
 
-routers.put("/trilhas:id", trilhasControllers.post_Put("put"));
+routers.put("/trilhas:id", authMiddelwares.verifyToken, trilhasControllers.post_Put("put"));
 
-routers.delete("trilhas/:id", trilhasControllers.delete);
+routers.delete("trilhas/:id", authMiddelwares.verifyToken, trilhasControllers.delete);
 
 
 // Rotas referentes a Usuarios
-routers.get("/allUsuarios", usuarioControllers.showAll);
+routers.post("/login", authMiddelwares.auth);
 
-routers.post("/usuarios", usuarioControllers.post_Put("post"));
+routers.get("/allUsuarios", authMiddelwares.verifyToken, usuarioControllers.showAll);
 
-routers.put("/usuarios/:id", usuarioControllers.post_Put("put"));
+routers.post("/usuarios", authMiddelwares.verifyToken, usuarioControllers.post_Put("post"));
 
-routers.delete("/usuarios/:id", usuarioControllers.delete);
+routers.put("/usuarios/:id", authMiddelwares.verifyToken, usuarioControllers.post_Put("put"));
+
+routers.delete("/usuarios/:id", authMiddelwares.verifyToken, usuarioControllers.delete);
 
 module.exports = routers;
